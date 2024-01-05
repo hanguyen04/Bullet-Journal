@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TimePicker.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">pa05-template</a> &gt; <a href="index.source.html" class="el_package">cs3500.pa05.Model.JavaFxDialog</a> &gt; <span class="el_source">TimePicker.java</span></div><h1>TimePicker.java</h1><pre class="source lang-java linenums">package cs3500.pa05.Model.JavaFxDialog;
+
+import javafx.collections.FXCollections;
+import javafx.geometry.Pos;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+
+/**
+ * Represents a JavaFX time picker dialog.
+ */
+public class TimePicker implements JavaFxDialog {
+<span class="nc" id="L13">  HBox timePickerHbox = new HBox(10);</span>
+<span class="nc" id="L14">  ComboBox&lt;String&gt; hourComboBox = new ComboBox&lt;&gt;(</span>
+<span class="nc" id="L15">      FXCollections.observableArrayList(&quot;00&quot;, &quot;01&quot;, &quot;02&quot;, &quot;03&quot;, &quot;04&quot;, &quot;05&quot;, &quot;06&quot;, &quot;07&quot;, &quot;08&quot;, &quot;09&quot;,</span>
+          &quot;10&quot;, &quot;11&quot;, &quot;12&quot;, &quot;13&quot;, &quot;14&quot;, &quot;15&quot;, &quot;16&quot;, &quot;17&quot;, &quot;18&quot;, &quot;19&quot;, &quot;20&quot;, &quot;21&quot;, &quot;22&quot;, &quot;23&quot;));
+<span class="nc" id="L17">  ComboBox&lt;String&gt; minuteComboBox =</span>
+<span class="nc" id="L18">      new ComboBox&lt;&gt;(FXCollections.observableArrayList(&quot;00&quot;, &quot;15&quot;, &quot;30&quot;, &quot;45&quot;));</span>
+
+<span class="nc" id="L20">  private String type = &quot;TimePicker&quot;;</span>
+<span class="nc" id="L21">  String customLabel = &quot;&quot;;</span>
+<span class="nc" id="L22">  Label label = new Label();</span>
+
+  /**
+   * Create a time picker dialog.
+   *
+   * @param customLabel The label of the time picker
+   */
+<span class="nc" id="L29">  public TimePicker(String customLabel) {</span>
+<span class="nc" id="L30">    this.customLabel = customLabel;</span>
+<span class="nc" id="L31">    this.hourComboBox.setValue(&quot;00&quot;);</span>
+<span class="nc" id="L32">    this.hourComboBox.setOnAction(e -&gt; {</span>
+<span class="nc" id="L33">      this.updateLabel();</span>
+<span class="nc" id="L34">    });</span>
+<span class="nc" id="L35">    this.minuteComboBox.setValue(&quot;00&quot;);</span>
+<span class="nc" id="L36">    this.minuteComboBox.setOnAction(e -&gt; {</span>
+<span class="nc" id="L37">      this.updateLabel();</span>
+<span class="nc" id="L38">    });</span>
+<span class="nc" id="L39">    this.timePickerHbox.getChildren().addAll(hourComboBox, minuteComboBox, label);</span>
+<span class="nc" id="L40">    this.timePickerHbox.setPrefWidth(350);</span>
+<span class="nc" id="L41">    this.timePickerHbox.setPrefHeight(40);</span>
+<span class="nc" id="L42">    this.timePickerHbox.setAlignment(Pos.CENTER);</span>
+<span class="nc" id="L43">    this.updateLabel();</span>
+<span class="nc" id="L44">  }</span>
+
+  /**
+   * Get the type of this JavaFxDialog.
+   *
+   * @return The type of this JavaFxDialog
+   */
+  @Override
+  public String type() {
+<span class="nc" id="L53">    return this.type;</span>
+  }
+
+  /**
+   * Change the type identifier of this dialog.
+   *
+   * @param type The new identifier
+   */
+  @Override
+  public void changeType(String type) {
+<span class="nc" id="L63">    this.type = type;</span>
+<span class="nc" id="L64">  }</span>
+
+  /**
+   * Get the HBox of this dialog.
+   *
+   * @return The HBox of this dialog
+   */
+  @Override
+  public HBox getHbox() {
+<span class="nc" id="L73">    return timePickerHbox;</span>
+  }
+
+  /**
+   * Get the value of the dialog.
+   *
+   * @return The dialog's entered value
+   */
+  @Override
+  public String getValue() {
+<span class="nc" id="L83">    String hour = hourComboBox.getValue();</span>
+<span class="nc" id="L84">    String minute = minuteComboBox.getValue();</span>
+<span class="nc" id="L85">    return hour + &quot;:&quot; + minute;</span>
+  }
+
+  /**
+   * Update the label of this dialog.
+   */
+  private void updateLabel() {
+<span class="nc" id="L92">    this.label.setText(this.customLabel + this.getValue());</span>
+<span class="nc" id="L93">  }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

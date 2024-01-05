@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BujoView.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">pa05-template</a> &gt; <a href="index.source.html" class="el_package">cs3500.pa05.View</a> &gt; <span class="el_source">BujoView.java</span></div><h1>BujoView.java</h1><pre class="source lang-java linenums">package cs3500.pa05.View;
+
+import java.io.IOException;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import cs3500.pa05.Controller.Controller;
+
+/**
+ * Represents the view of a bujo session.
+ */
+public class BujoView implements View {
+<span class="nc" id="L12">  FXMLLoader loader = new FXMLLoader();</span>
+
+  /**
+   * Create a new BujoView.
+   *
+   * @param controller The controller of the GUI
+   */
+<span class="nc" id="L19">  public BujoView(Controller controller) {</span>
+<span class="nc" id="L20">    this.loader.setController(controller);</span>
+<span class="nc" id="L21">    this.loader.setLocation(getClass().getClassLoader().getResource(&quot;PA5JavaJournal.fxml&quot;));</span>
+<span class="nc" id="L22">  }</span>
+
+  /**
+   * Loads a scene from a bujo GUI layout.
+   *
+   * @return the layout
+   */
+  @Override
+  public Scene load() {
+    try {
+<span class="nc" id="L32">      return this.loader.load();</span>
+<span class="nc" id="L33">    } catch (IOException exc) {</span>
+<span class="nc" id="L34">      throw new IllegalStateException(&quot;Unable to load layout.&quot;);</span>
+    }
+  }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

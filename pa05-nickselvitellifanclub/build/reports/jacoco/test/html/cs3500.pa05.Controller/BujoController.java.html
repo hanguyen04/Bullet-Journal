@@ -1,0 +1,915 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BujoController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">pa05-template</a> &gt; <a href="index.source.html" class="el_package">cs3500.pa05.Controller</a> &gt; <span class="el_source">BujoController.java</span></div><h1>BujoController.java</h1><pre class="source lang-java linenums">package cs3500.pa05.Controller;
+
+import static cs3500.pa05.Model.Weekdays.getEnumFromString;
+
+import cs3500.pa05.Model.BujoFileReader;
+import cs3500.pa05.Model.BujoFileWriter;
+import cs3500.pa05.Model.Day;
+import cs3500.pa05.Model.Event;
+import cs3500.pa05.Model.JavaFxDialog.DayPicker;
+import cs3500.pa05.Model.JavaFxDialog.DescriptionField;
+import cs3500.pa05.Model.JavaFxDialog.JavaFxDialog;
+import cs3500.pa05.Model.JavaFxDialog.NameEntry;
+import cs3500.pa05.Model.JavaFxDialog.TimePicker;
+import cs3500.pa05.Model.Task;
+import cs3500.pa05.Model.Theme;
+import cs3500.pa05.Model.Week;
+import cs3500.pa05.Model.Weekdays;
+import java.io.File;
+import java.util.List;
+import java.util.Optional;
+import javafx.fxml.FXML;
+import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextInputDialog;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import javafx.stage.Window;
+
+/**
+ * Controller class for a bujo session.
+ */
+public class BujoController implements Controller {
+  private Stage stage;
+  private Week week;
+  @FXML
+  private AnchorPane anchorPane;
+  @FXML
+  private ListView mondayEventList;
+  @FXML
+  private ListView mondayTaskList;
+  @FXML
+  private ListView tuesdayEventList;
+  @FXML
+  private ListView tuesdayTaskList;
+  @FXML
+  private ListView wednesdayEventList;
+  @FXML
+  private ListView wednesdayTaskList;
+  @FXML
+  private ListView thursdayEventList;
+  @FXML
+  private ListView thursdayTaskList;
+  @FXML
+  private ListView fridayEventList;
+  @FXML
+  private ListView fridayTaskList;
+  @FXML
+  private ListView saturdayEventList;
+  @FXML
+  private ListView saturdayTaskList;
+  @FXML
+  private ListView sundayEventList;
+  @FXML
+  private ListView sundayTaskList;
+  @FXML
+  private ListView allTasksList;
+  @FXML
+  private HBox weekHbox;
+  @FXML
+  private HBox headerHbox;
+  @FXML
+  private HBox weekViewHbox;
+  @FXML
+  private Button addEventButton;
+  @FXML
+  private Button addTaskButton;
+  @FXML
+  private Button chooseBujoButton;
+  @FXML
+  private Button saveBujoButton;
+  @FXML
+  private Button setMaxEventsButton;
+  @FXML
+  private Button setMaxTasksButton;
+  @FXML
+  private Hyperlink weekNameText;
+  @FXML
+  private Text maxTasks;
+  @FXML
+  private Text maxEvents;
+  @FXML
+  private Text headerText;
+  @FXML
+  private Text totalTasksText;
+  @FXML
+  private Text totalEventsText;
+  @FXML
+  private Text taskCompletionText;
+  @FXML
+  private Text allTasksText;
+  @FXML
+  private MenuButton themeMenuButton;
+  @FXML
+  private BorderPane rootPane;
+  @FXML
+  private VBox taskSideBar;
+
+  /**
+   * Create a new BujoController.
+   *
+   * @param week  The week to be processed
+   * @param stage The stage of this gui
+   */
+<span class="nc" id="L135">  public BujoController(Week week, Stage stage) {</span>
+<span class="nc" id="L136">    this.week = week;</span>
+<span class="nc" id="L137">    this.stage = stage;</span>
+<span class="nc" id="L138">  }</span>
+
+  /**
+   * Run the application controller.
+   */
+  @Override
+  public void run() {
+<span class="nc" id="L145">    this.initGui();</span>
+<span class="nc" id="L146">  }</span>
+
+  /**
+   * Initialize the buttons in this bujo Session.
+   */
+  private void initGui() {
+<span class="nc" id="L152">    this.maxTasks.setText(&quot;Max Tasks: &quot; + this.week.getMaxTasks());</span>
+<span class="nc" id="L153">    this.maxEvents.setText(&quot;Max Events: &quot; + this.week.getMaxEvents());</span>
+<span class="nc" id="L154">    this.setMaxEventsButton.setOnMouseClicked(e -&gt; {</span>
+<span class="nc" id="L155">      this.setMaxEvents();</span>
+<span class="nc" id="L156">    });</span>
+<span class="nc" id="L157">    this.setMaxTasksButton.setOnMouseClicked(e -&gt; {</span>
+<span class="nc" id="L158">      this.setMaxTasks();</span>
+<span class="nc" id="L159">    });</span>
+<span class="nc" id="L160">    this.addEventButton.setOnMouseClicked(e -&gt; {</span>
+<span class="nc" id="L161">      this.showAddEventDialogue();</span>
+<span class="nc" id="L162">    });</span>
+<span class="nc" id="L163">    this.addTaskButton.setOnMouseClicked(e -&gt; {</span>
+<span class="nc" id="L164">      this.showAddTaskDialogue();</span>
+<span class="nc" id="L165">    });</span>
+<span class="nc" id="L166">    this.weekNameText.setText(this.week.getName());</span>
+<span class="nc" id="L167">    this.weekNameText.setOnMouseClicked(e -&gt; {</span>
+<span class="nc" id="L168">      this.changeWeekName();</span>
+<span class="nc" id="L169">    });</span>
+<span class="nc" id="L170">    this.chooseBujoButton.setOnAction(e -&gt; {</span>
+<span class="nc" id="L171">      this.chooseFile();</span>
+<span class="nc" id="L172">    });</span>
+<span class="nc" id="L173">    this.saveBujoButton.setOnAction(e -&gt; {</span>
+<span class="nc" id="L174">      this.saveFile();</span>
+<span class="nc" id="L175">    });</span>
+<span class="nc" id="L176">    this.refreshLists();</span>
+<span class="nc" id="L177">    this.updateWeeklyOverview();</span>
+<span class="nc" id="L178">    this.initThemeOptions();</span>
+<span class="nc" id="L179">    this.applyTheme();</span>
+<span class="nc" id="L180">  }</span>
+
+  /**
+   * Update the weekly overview statistics.
+   */
+  private void updateWeeklyOverview() {
+<span class="nc" id="L186">    int totalTasks = this.week.getAllTasks().size();</span>
+<span class="nc" id="L187">    int totalEvents = this.week.getAllEvents().size();</span>
+<span class="nc" id="L188">    int completedTasks = this.week.getCompletedTasks().size();</span>
+<span class="nc" id="L189">    double completionPercentage = ((double) completedTasks / totalTasks) * 100;</span>
+<span class="nc" id="L190">    String formattedPercentage = String.format(&quot;%.1f&quot;, completionPercentage);</span>
+
+<span class="nc" id="L192">    this.totalTasksText.setText(&quot;Total Tasks: &quot; + totalTasks);</span>
+<span class="nc" id="L193">    this.totalEventsText.setText(&quot;Total Events: &quot; + totalEvents);</span>
+<span class="nc" id="L194">    this.taskCompletionText.setText(&quot;Task Completion &quot; + formattedPercentage + &quot;%&quot;);</span>
+
+<span class="nc" id="L196">  }</span>
+
+  /**
+   * Shows a dialog to change the name of this week.
+   */
+  private void changeWeekName() {
+<span class="nc" id="L202">    TextInputDialog dialog = new TextInputDialog();</span>
+<span class="nc" id="L203">    dialog.setTitle(&quot;New Week Name&quot;);</span>
+<span class="nc" id="L204">    dialog.setHeaderText(&quot;Enter a new week name:&quot;);</span>
+<span class="nc" id="L205">    dialog.setContentText(&quot;Name:&quot;);</span>
+
+<span class="nc" id="L207">    Optional&lt;String&gt; result = dialog.showAndWait();</span>
+<span class="nc" id="L208">    result.ifPresent(name -&gt; {</span>
+<span class="nc" id="L209">      System.out.println(&quot;Entered name: &quot; + name);</span>
+<span class="nc" id="L210">      this.week.changeName(name);</span>
+<span class="nc" id="L211">      this.weekNameText.setText(name);</span>
+<span class="nc" id="L212">    });</span>
+<span class="nc" id="L213">  }</span>
+
+  /**
+   * Set the bujo theme.
+   */
+  private void setTheme(Theme theme) {
+<span class="nc" id="L219">    this.week.changeTheme(theme);</span>
+<span class="nc" id="L220">  }</span>
+
+  /**
+   * Applying the application theme.
+   */
+  private void applyTheme() {
+<span class="nc" id="L226">    Theme theme = this.week.getTheme();</span>
+<span class="nc" id="L227">    Font font = theme.getFont();</span>
+<span class="nc" id="L228">    Font headerfont = new Font(font.getName(), 30);</span>
+<span class="nc" id="L229">    Color fontColor = theme.getFontColor();</span>
+<span class="nc" id="L230">    Color primaryColor = theme.getPrimaryColor();</span>
+<span class="nc" id="L231">    Color secondaryColor = theme.getSecondaryColor();</span>
+
+<span class="nc" id="L233">    BackgroundFill primaryBackgroundFill =</span>
+        new BackgroundFill(primaryColor, CornerRadii.EMPTY, javafx.geometry.Insets.EMPTY);
+<span class="nc" id="L235">    BackgroundFill secondaryBackgroundFill =</span>
+        new BackgroundFill(secondaryColor, CornerRadii.EMPTY, javafx.geometry.Insets.EMPTY);
+
+<span class="nc" id="L238">    Background primaryBackground = new Background(primaryBackgroundFill);</span>
+<span class="nc" id="L239">    Background secondaryBackground = new Background(secondaryBackgroundFill);</span>
+
+<span class="nc" id="L241">    this.headerHbox.setBackground(secondaryBackground);</span>
+<span class="nc" id="L242">    this.weekViewHbox.setBackground(secondaryBackground);</span>
+<span class="nc" id="L243">    this.weekHbox.setBackground(primaryBackground);</span>
+
+<span class="nc" id="L245">    this.taskSideBar.setBackground(primaryBackground);</span>
+<span class="nc" id="L246">    this.allTasksText.setFont(font);</span>
+<span class="nc" id="L247">    this.allTasksText.setFill(fontColor);</span>
+
+
+<span class="nc" id="L250">    weekHbox.setStyle(&quot;-fx-font-family: &quot; + font.getFamily() + &quot;;&quot;);</span>
+<span class="nc" id="L251">    headerHbox.setStyle(&quot;-fx-font-family: &quot; + font.getFamily() + &quot;;&quot;);</span>
+<span class="nc" id="L252">    weekViewHbox.setStyle(&quot;-fx-font-family: &quot; + font.getFamily() + &quot;;&quot;);</span>
+<span class="nc" id="L253">    this.headerText.setFill(fontColor);</span>
+<span class="nc" id="L254">    this.headerText.setFont(headerfont);</span>
+
+<span class="nc" id="L256">    this.weekNameText.setTextFill(fontColor);</span>
+<span class="nc" id="L257">    this.weekNameText.setFont(headerfont);</span>
+<span class="nc bnc" id="L258" title="All 2 branches missed.">    for (javafx.scene.Node node : weekHbox.getChildren()) {</span>
+<span class="nc bnc" id="L259" title="All 2 branches missed.">      if (node instanceof VBox) {</span>
+<span class="nc" id="L260">        VBox innerVBox = (VBox) node;</span>
+<span class="nc bnc" id="L261" title="All 2 branches missed.">        for (javafx.scene.Node innerNode : innerVBox.getChildren()) {</span>
+<span class="nc bnc" id="L262" title="All 2 branches missed.">          if (innerNode instanceof Text) {</span>
+<span class="nc" id="L263">            Text text = (Text) innerNode;</span>
+<span class="nc" id="L264">            text.setFont(font);</span>
+<span class="nc" id="L265">            text.setFill(fontColor);</span>
+          }
+<span class="nc" id="L267">        }</span>
+      }
+<span class="nc" id="L269">    }</span>
+<span class="nc bnc" id="L270" title="All 2 branches missed.">    for (javafx.scene.Node node : weekViewHbox.getChildren()) {</span>
+<span class="nc bnc" id="L271" title="All 2 branches missed.">      if (node instanceof VBox) {</span>
+<span class="nc" id="L272">        VBox innerVBox = (VBox) node;</span>
+<span class="nc bnc" id="L273" title="All 2 branches missed.">        for (javafx.scene.Node innerNode : innerVBox.getChildren()) {</span>
+<span class="nc bnc" id="L274" title="All 2 branches missed.">          if (innerNode instanceof Text) {</span>
+<span class="nc" id="L275">            Text text = (Text) innerNode;</span>
+<span class="nc" id="L276">            text.setFont(font);</span>
+<span class="nc" id="L277">            text.setFill(fontColor);</span>
+          }
+<span class="nc" id="L279">        }</span>
+      }
+<span class="nc" id="L281">    }</span>
+
+<span class="nc" id="L283">  }</span>
+
+  /**
+   * Show a pop-up for the user to create a theme.
+   */
+  private void createTheme() {
+<span class="nc" id="L289">    Dialog&lt;Event&gt; dialog = new Dialog&lt;&gt;();</span>
+<span class="nc" id="L290">    dialog.setTitle(&quot;Create New Theme&quot;);</span>
+<span class="nc" id="L291">    Window window = dialog.getDialogPane().getScene().getWindow();</span>
+
+<span class="nc" id="L293">    GridPane grid = new GridPane();</span>
+
+<span class="nc" id="L295">    Label nameLabel = new Label(&quot;Name: &quot;);</span>
+<span class="nc" id="L296">    NameEntry themeNameEntry = new NameEntry();</span>
+<span class="nc" id="L297">    grid.add(nameLabel, 1, 1);</span>
+<span class="nc" id="L298">    grid.add(themeNameEntry.getHbox(), 2, 1);</span>
+
+<span class="nc" id="L300">    Label fontLabel = new Label(&quot;Font:&quot;);</span>
+<span class="nc" id="L301">    ComboBox&lt;String&gt; fontComboBox = new ComboBox&lt;&gt;();</span>
+<span class="nc" id="L302">    Font.getFamilies().forEach(fontFamily -&gt; fontComboBox.getItems().add(fontFamily));</span>
+<span class="nc" id="L303">    fontComboBox.getSelectionModel().selectFirst();</span>
+<span class="nc" id="L304">    grid.add(fontLabel, 1, 2);</span>
+<span class="nc" id="L305">    grid.add(fontComboBox, 2, 2);</span>
+
+<span class="nc" id="L307">    Label fontColorPickerLabel = new Label(&quot;Font Color: &quot;);</span>
+<span class="nc" id="L308">    ColorPicker fontColorPicker = new ColorPicker();</span>
+<span class="nc" id="L309">    grid.add(fontColorPickerLabel, 1, 3);</span>
+<span class="nc" id="L310">    grid.add(fontColorPicker, 2, 3);</span>
+
+<span class="nc" id="L312">    Label primaryColorPickerLabel = new Label(&quot;Primary Color: &quot;);</span>
+<span class="nc" id="L313">    ColorPicker primaryColorPicker = new ColorPicker();</span>
+<span class="nc" id="L314">    grid.add(primaryColorPickerLabel, 1, 4);</span>
+<span class="nc" id="L315">    grid.add(primaryColorPicker, 2, 4);</span>
+
+<span class="nc" id="L317">    Label secondaryColorPickerLabel = new Label(&quot;Secondary Color: &quot;);</span>
+<span class="nc" id="L318">    ColorPicker secondaryColorPicker = new ColorPicker();</span>
+<span class="nc" id="L319">    grid.add(secondaryColorPickerLabel, 1, 5);</span>
+<span class="nc" id="L320">    grid.add(secondaryColorPicker, 2, 5);</span>
+
+<span class="nc" id="L322">    Button createButton = new Button(&quot;Create&quot;);</span>
+<span class="nc" id="L323">    Button cancelButton = new Button(&quot;Cancel&quot;);</span>
+<span class="nc" id="L324">    createButton.setOnMouseClicked(e -&gt; {</span>
+<span class="nc" id="L325">      Font newFont = new Font(fontComboBox.getValue(), 17);</span>
+<span class="nc" id="L326">      Theme newTheme = new Theme(themeNameEntry.getValue(), newFont, primaryColorPicker.getValue(),</span>
+<span class="nc" id="L327">          secondaryColorPicker.getValue(), fontColorPicker.getValue());</span>
+<span class="nc" id="L328">      this.week.addToThemes(newTheme);</span>
+<span class="nc" id="L329">      this.themeMenuButton.getItems().clear();</span>
+<span class="nc" id="L330">      this.initThemeOptions();</span>
+<span class="nc" id="L331">      window.hide();</span>
+<span class="nc" id="L332">    });</span>
+<span class="nc" id="L333">    grid.add(createButton, 1, 6);</span>
+<span class="nc" id="L334">    grid.add(cancelButton, 2, 6);</span>
+
+<span class="nc" id="L336">    window.setOnCloseRequest(event -&gt; window.hide());</span>
+<span class="nc" id="L337">    cancelButton.setOnAction(event -&gt; window.hide());</span>
+<span class="nc" id="L338">    dialog.getDialogPane().setContent(grid);</span>
+<span class="nc" id="L339">    dialog.show();</span>
+<span class="nc" id="L340">  }</span>
+
+  /**
+   * Initialize the theme menu options.
+   */
+  private void initThemeOptions() {
+<span class="nc bnc" id="L346" title="All 2 branches missed.">    for (Theme theme : this.week.getThemeList()) {</span>
+<span class="nc" id="L347">      MenuItem themeMenuItem = new MenuItem(theme.getName());</span>
+<span class="nc" id="L348">      themeMenuItem.setOnAction(e -&gt; {</span>
+<span class="nc" id="L349">        System.out.println(&quot;Applying: &quot; + theme.getName());</span>
+<span class="nc" id="L350">        this.setTheme(theme);</span>
+<span class="nc" id="L351">        this.applyTheme();</span>
+<span class="nc" id="L352">      });</span>
+<span class="nc" id="L353">      this.themeMenuButton.getItems().add(themeMenuItem);</span>
+<span class="nc" id="L354">    }</span>
+<span class="nc" id="L355">    MenuItem addTheme = new MenuItem(&quot;Add Theme +&quot;);</span>
+<span class="nc" id="L356">    addTheme.setOnAction(e -&gt; {</span>
+<span class="nc" id="L357">      this.createTheme();</span>
+<span class="nc" id="L358">    });</span>
+<span class="nc" id="L359">    this.themeMenuButton.getItems().add(addTheme);</span>
+<span class="nc" id="L360">  }</span>
+
+  /**
+   * Handler method for setting the max amount of events.
+   */
+  private void setMaxEvents() {
+<span class="nc" id="L366">    TextInputDialog dialog = new TextInputDialog();</span>
+<span class="nc" id="L367">    dialog.setTitle(&quot;New Maximum Events&quot;);</span>
+<span class="nc" id="L368">    dialog.setHeaderText(null);</span>
+<span class="nc" id="L369">    dialog.setContentText(&quot;New Max Events:&quot;);</span>
+<span class="nc" id="L370">    Optional&lt;String&gt; result = dialog.showAndWait();</span>
+<span class="nc" id="L371">    result.ifPresent(input -&gt; {</span>
+      try {
+<span class="nc" id="L373">        int number = Integer.parseInt(input);</span>
+<span class="nc" id="L374">        System.out.println(&quot;Inputted number: &quot; + number);</span>
+<span class="nc" id="L375">        this.week.setMaxEvents(number);</span>
+<span class="nc" id="L376">        this.maxEvents.setText(&quot;Max Events: &quot; + number);</span>
+<span class="nc" id="L377">      } catch (NumberFormatException e) {</span>
+<span class="nc" id="L378">        Alert alert = new Alert(Alert.AlertType.ERROR, &quot;Invalid number input&quot;);</span>
+<span class="nc" id="L379">        alert.showAndWait();</span>
+<span class="nc" id="L380">      }</span>
+<span class="nc" id="L381">    });</span>
+<span class="nc" id="L382">    dialog.setResultConverter(dialogButton -&gt; {</span>
+<span class="nc bnc" id="L383" title="All 2 branches missed.">      if (dialogButton == ButtonType.OK) {</span>
+<span class="nc" id="L384">        return dialog.getEditor().getText();</span>
+      }
+<span class="nc" id="L386">      return null;</span>
+    });
+<span class="nc" id="L388">  }</span>
+
+  /**
+   * Handler method for setting the max amount of tasks.
+   */
+  private void setMaxTasks() {
+<span class="nc" id="L394">    TextInputDialog dialog = new TextInputDialog();</span>
+<span class="nc" id="L395">    dialog.setTitle(&quot;New Maximum Tasks&quot;);</span>
+<span class="nc" id="L396">    dialog.setHeaderText(null);</span>
+<span class="nc" id="L397">    dialog.setContentText(&quot;New Max Tasks:&quot;);</span>
+<span class="nc" id="L398">    Optional&lt;String&gt; result = dialog.showAndWait();</span>
+<span class="nc" id="L399">    result.ifPresent(input -&gt; {</span>
+      try {
+<span class="nc" id="L401">        int number = Integer.parseInt(input);</span>
+<span class="nc" id="L402">        System.out.println(&quot;Inputted number: &quot; + number);</span>
+<span class="nc" id="L403">        this.week.setMaxTasks(number);</span>
+<span class="nc" id="L404">        this.maxTasks.setText(&quot;Max Tasks: &quot; + number);</span>
+<span class="nc" id="L405">      } catch (NumberFormatException e) {</span>
+<span class="nc" id="L406">        Alert alert = new Alert(Alert.AlertType.ERROR, &quot;Invalid number input&quot;);</span>
+<span class="nc" id="L407">        alert.showAndWait();</span>
+<span class="nc" id="L408">      }</span>
+<span class="nc" id="L409">    });</span>
+<span class="nc" id="L410">    dialog.setResultConverter(dialogButton -&gt; {</span>
+<span class="nc bnc" id="L411" title="All 2 branches missed.">      if (dialogButton == ButtonType.OK) {</span>
+<span class="nc" id="L412">        return dialog.getEditor().getText();</span>
+      }
+<span class="nc" id="L414">      return null;</span>
+    });
+<span class="nc" id="L416">  }</span>
+
+  /**
+   * Show a dialogue for adding an event.
+   */
+  private void showAddEventDialogue() {
+    // Creating the name entry
+<span class="nc" id="L423">    NameEntry nameEntry = new NameEntry();</span>
+    // Creating the day selection
+<span class="nc" id="L425">    DayPicker chooseDay = new DayPicker();</span>
+    // Creating Time Pickers for start time and duration
+<span class="nc" id="L427">    TimePicker startTimePicker = new TimePicker(&quot;Selected Start Time: &quot;);</span>
+<span class="nc" id="L428">    TimePicker durationPicker = new TimePicker(&quot;Duration : &quot;);</span>
+    // Creating description field
+<span class="nc" id="L430">    DescriptionField descriptionField = new DescriptionField();</span>
+    // Creating 'create' button
+<span class="nc" id="L432">    Button createEventButton = new Button(&quot;Create&quot;);</span>
+<span class="nc" id="L433">    createEventButton.setOnMouseClicked(e -&gt; {</span>
+<span class="nc" id="L434">      Weekdays weekday = getEnumFromString(chooseDay.getValue());</span>
+<span class="nc bnc" id="L435" title="All 2 branches missed.">      if (this.atCapacityEvents(this.week.getDay(weekday.getCorrespondingIndex()))) {</span>
+<span class="nc" id="L436">        Alert alert =</span>
+            new Alert(Alert.AlertType.ERROR, &quot;Too many events! Remove some before you add more&quot;);
+<span class="nc" id="L438">        alert.showAndWait();</span>
+<span class="nc" id="L439">      } else {</span>
+<span class="nc" id="L440">        Event newEvent =</span>
+<span class="nc" id="L441">            new Event(nameEntry.getValue(), startTimePicker.getValue(), durationPicker.getValue(),</span>
+<span class="nc" id="L442">                descriptionField.getValue());</span>
+<span class="nc" id="L443">        this.addEvent(weekday.getCorrespondingIndex(), newEvent);</span>
+      }
+<span class="nc" id="L445">    });</span>
+<span class="nc" id="L446">    Button cancelButton = new Button(&quot;Cancel&quot;);</span>
+<span class="nc" id="L447">    HBox finalButtons = new HBox();</span>
+<span class="nc" id="L448">    finalButtons.getChildren().addAll(createEventButton, cancelButton);</span>
+<span class="nc" id="L449">    finalButtons.setAlignment(Pos.CENTER);</span>
+<span class="nc" id="L450">    finalButtons.setPrefHeight(40);</span>
+
+    // Creating and showing the dialog
+<span class="nc" id="L453">    VBox dialogVbox = new VBox();</span>
+<span class="nc" id="L454">    dialogVbox.getChildren()</span>
+<span class="nc" id="L455">        .addAll(nameEntry.getHbox(), chooseDay.getHbox(), startTimePicker.getHbox(),</span>
+<span class="nc" id="L456">            durationPicker.getHbox(), descriptionField.getHbox(), finalButtons);</span>
+<span class="nc" id="L457">    Dialog&lt;Void&gt; dialog = new Dialog&lt;&gt;();</span>
+
+<span class="nc" id="L459">    dialog.setTitle(&quot;Create Event&quot;);</span>
+<span class="nc" id="L460">    dialog.getDialogPane().setPrefWidth(300);</span>
+<span class="nc" id="L461">    dialog.getDialogPane().setContent(dialogVbox);</span>
+<span class="nc" id="L462">    Window window = dialog.getDialogPane().getScene().getWindow();</span>
+<span class="nc" id="L463">    window.setOnCloseRequest(event -&gt; window.hide());</span>
+<span class="nc" id="L464">    cancelButton.setOnAction(event -&gt; window.hide());</span>
+<span class="nc" id="L465">    dialog.show();</span>
+<span class="nc" id="L466">  }</span>
+
+  /**
+   * Handler method for adding an event.
+   */
+  private void addEvent(int dayIndex, Event event) {
+<span class="nc" id="L472">    this.week.addEvent(dayIndex, event);</span>
+<span class="nc" id="L473">    Hyperlink newEvent = new Hyperlink(event.getName());</span>
+<span class="nc" id="L474">    newEvent.setOnMouseClicked(e -&gt; {</span>
+<span class="nc" id="L475">      this.handleClickedOnEvent(event);</span>
+<span class="nc" id="L476">    });</span>
+<span class="nc bnc" id="L477" title="All 8 branches missed.">    switch (dayIndex) {</span>
+      case 0:
+<span class="nc" id="L479">        this.mondayEventList.getItems().add(newEvent);</span>
+<span class="nc" id="L480">        break;</span>
+      case 1:
+<span class="nc" id="L482">        this.tuesdayEventList.getItems().add(newEvent);</span>
+<span class="nc" id="L483">        break;</span>
+      case 2:
+<span class="nc" id="L485">        this.wednesdayEventList.getItems().add(newEvent);</span>
+<span class="nc" id="L486">        break;</span>
+      case 3:
+<span class="nc" id="L488">        this.thursdayEventList.getItems().add(newEvent);</span>
+<span class="nc" id="L489">        break;</span>
+      case 4:
+<span class="nc" id="L491">        this.fridayEventList.getItems().add(newEvent);</span>
+<span class="nc" id="L492">        break;</span>
+      case 5:
+<span class="nc" id="L494">        this.saturdayEventList.getItems().add(newEvent);</span>
+<span class="nc" id="L495">        break;</span>
+      case 6:
+<span class="nc" id="L497">        this.sundayEventList.getItems().add(newEvent);</span>
+        break;
+    }
+<span class="nc" id="L500">    updateWeeklyOverview();</span>
+<span class="nc" id="L501">  }</span>
+
+  /**
+   * Handles when a user clicks on an event.
+   */
+  private void handleClickedOnEvent(Event event) {
+    // Create a dialog to show event details
+<span class="nc" id="L508">    Dialog&lt;Event&gt; dialog = new Dialog&lt;&gt;();</span>
+<span class="nc" id="L509">    dialog.setTitle(&quot;Event Details&quot;);</span>
+<span class="nc" id="L510">    dialog.setHeaderText(event.getName());</span>
+
+    // Create labels and text fields for each event detail
+<span class="nc" id="L513">    Label nameLabel = new Label(&quot;Name: &quot; + event.getName());</span>
+<span class="nc" id="L514">    Button editNameButton = new Button(&quot;Edit&quot;);</span>
+<span class="nc" id="L515">    JavaFxDialog editNameDialog = new NameEntry();</span>
+<span class="nc" id="L516">    editNameButton.setOnMouseClicked(e -&gt; {</span>
+<span class="nc" id="L517">      this.editEventDialogue(editNameDialog, event);</span>
+<span class="nc" id="L518">      dialog.close();</span>
+<span class="nc" id="L519">    });</span>
+
+<span class="nc" id="L521">    Label startTimeLabel = new Label(&quot;Start Time: &quot; + event.getStartTime());</span>
+<span class="nc" id="L522">    Button editTimeButton = new Button(&quot;Edit&quot;);</span>
+<span class="nc" id="L523">    JavaFxDialog editTimeDialogue = new TimePicker(&quot;New start time: &quot;);</span>
+<span class="nc" id="L524">    editTimeButton.setOnMouseClicked(e -&gt; {</span>
+<span class="nc" id="L525">      this.editEventDialogue(editTimeDialogue, event);</span>
+<span class="nc" id="L526">      dialog.close();</span>
+<span class="nc" id="L527">    });</span>
+
+<span class="nc" id="L529">    Label durationLabel = new Label(&quot;Duration: &quot; + event.getDuration());</span>
+<span class="nc" id="L530">    Button editDurationButton = new Button(&quot;Edit&quot;);</span>
+<span class="nc" id="L531">    JavaFxDialog editDurationDialogue = new TimePicker(&quot;New duration: &quot;);</span>
+<span class="nc" id="L532">    editDurationDialogue.changeType(&quot;DurationPicker&quot;);</span>
+<span class="nc" id="L533">    editDurationButton.setOnMouseClicked(e -&gt; {</span>
+<span class="nc" id="L534">      this.editEventDialogue(editDurationDialogue, event);</span>
+<span class="nc" id="L535">      dialog.close();</span>
+<span class="nc" id="L536">    });</span>
+
+<span class="nc" id="L538">    Label descriptionLabel = new Label(&quot;Description: &quot; + event.getDescription());</span>
+<span class="nc" id="L539">    Button editDescriptionButton = new Button(&quot;Edit&quot;);</span>
+<span class="nc" id="L540">    JavaFxDialog editDescriptionDialog = new DescriptionField();</span>
+<span class="nc" id="L541">    editDescriptionButton.setOnMouseClicked(e -&gt; {</span>
+<span class="nc" id="L542">      this.editEventDialogue(editDescriptionDialog, event);</span>
+<span class="nc" id="L543">      dialog.close();</span>
+<span class="nc" id="L544">    });</span>
+
+<span class="nc" id="L546">    Button deleteEventButton = new Button(&quot;Delete Event&quot;);</span>
+<span class="nc" id="L547">    deleteEventButton.setOnMouseClicked(e -&gt; {</span>
+<span class="nc" id="L548">      this.removeEvent(event);</span>
+<span class="nc" id="L549">      dialog.close();</span>
+<span class="nc" id="L550">    });</span>
+
+    // Create a grid pane to organize the labels and text fields
+<span class="nc" id="L553">    GridPane grid = new GridPane();</span>
+<span class="nc" id="L554">    grid.add(nameLabel, 1, 1);</span>
+<span class="nc" id="L555">    grid.add(editNameButton, 2, 1);</span>
+
+<span class="nc" id="L557">    grid.add(startTimeLabel, 1, 2);</span>
+<span class="nc" id="L558">    grid.add(editTimeButton, 2, 2);</span>
+
+<span class="nc" id="L560">    grid.add(durationLabel, 1, 3);</span>
+<span class="nc" id="L561">    grid.add(editDurationButton, 2, 3);</span>
+
+<span class="nc" id="L563">    grid.add(descriptionLabel, 1, 4);</span>
+<span class="nc" id="L564">    grid.add(editDescriptionButton, 2, 4);</span>
+
+<span class="nc" id="L566">    grid.add(deleteEventButton, 1, 5);</span>
+
+<span class="nc" id="L568">    dialog.getDialogPane().setContent(grid);</span>
+
+    // Add buttons to the dialog for editing and removing the event
+<span class="nc" id="L571">    dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK);</span>
+<span class="nc" id="L572">    dialog.show();</span>
+<span class="nc" id="L573">  }</span>
+
+  /**
+   * Show a dialog to edit an event.
+   *
+   * @param javaFxDialog The dialog to show the user
+   * @param event        The event this dialog pertains
+   */
+  private void editEventDialogue(JavaFxDialog javaFxDialog, Event event) {
+<span class="nc" id="L582">    Dialog&lt;Void&gt; dialog = new Dialog&lt;&gt;();</span>
+<span class="nc" id="L583">    dialog.setTitle(&quot;Edit Event&quot;);</span>
+<span class="nc" id="L584">    Button saveButton = new Button(&quot;Save&quot;);</span>
+<span class="nc" id="L585">    saveButton.setOnMouseClicked(e -&gt; {</span>
+<span class="nc bnc" id="L586" title="All 5 branches missed.">      switch (javaFxDialog.type()) {</span>
+        case &quot;NameEntry&quot;:
+<span class="nc" id="L588">          event.editName(javaFxDialog.getValue());</span>
+<span class="nc" id="L589">          this.refreshLists();</span>
+<span class="nc" id="L590">          dialog.close();</span>
+<span class="nc" id="L591">          this.handleClickedOnEvent(event);</span>
+<span class="nc" id="L592">          break;</span>
+        case &quot;TimePicker&quot;:
+<span class="nc" id="L594">          event.editStartTime(javaFxDialog.getValue());</span>
+<span class="nc" id="L595">          dialog.close();</span>
+<span class="nc" id="L596">          this.handleClickedOnEvent(event);</span>
+<span class="nc" id="L597">          break;</span>
+        case &quot;DurationPicker&quot;:
+<span class="nc" id="L599">          event.editDuration(javaFxDialog.getValue());</span>
+<span class="nc" id="L600">          dialog.close();</span>
+<span class="nc" id="L601">          this.handleClickedOnEvent(event);</span>
+<span class="nc" id="L602">          break;</span>
+        case &quot;DescriptionField&quot;:
+<span class="nc" id="L604">          event.editDescription(javaFxDialog.getValue());</span>
+<span class="nc" id="L605">          dialog.close();</span>
+<span class="nc" id="L606">          this.handleClickedOnEvent(event);</span>
+          break;
+      }
+<span class="nc" id="L609">    });</span>
+<span class="nc" id="L610">    GridPane eventEditGrid = new GridPane();</span>
+<span class="nc" id="L611">    eventEditGrid.add(javaFxDialog.getHbox(), 1, 1);</span>
+<span class="nc" id="L612">    eventEditGrid.add(saveButton, 1, 2);</span>
+<span class="nc" id="L613">    dialog.getDialogPane().setContent(eventEditGrid);</span>
+<span class="nc" id="L614">    dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK);</span>
+<span class="nc" id="L615">    dialog.show();</span>
+<span class="nc" id="L616">  }</span>
+
+  /**
+   * Remove an event.
+   *
+   * @param event the event to be removed
+   */
+  private void removeEvent(Event event) {
+<span class="nc bnc" id="L624" title="All 2 branches missed.">    for (int i = 0; i &lt; 6; i++) {</span>
+<span class="nc" id="L625">      Day curDay = this.week.getDay(i);</span>
+<span class="nc" id="L626">      curDay.removeEvent(event);</span>
+    }
+<span class="nc" id="L628">    this.refreshLists();</span>
+<span class="nc" id="L629">  }</span>
+
+  /**
+   * Show a dialogue to add a task.
+   */
+  private void showAddTaskDialogue() {
+    // Creating the name entry
+<span class="nc" id="L636">    NameEntry nameEntry = new NameEntry();</span>
+    // Creating the day selection
+<span class="nc" id="L638">    DayPicker chooseDay = new DayPicker();</span>
+    // Creating description field
+<span class="nc" id="L640">    DescriptionField descriptionField = new DescriptionField();</span>
+<span class="nc" id="L641">    Button createTaskButton = new Button(&quot;Create&quot;);</span>
+<span class="nc" id="L642">    createTaskButton.setOnMouseClicked(e -&gt; {</span>
+<span class="nc" id="L643">      Weekdays weekday = getEnumFromString(chooseDay.getValue());</span>
+<span class="nc bnc" id="L644" title="All 2 branches missed.">      if (this.atCapacityTasks(this.week.getDay(weekday.getCorrespondingIndex()))) {</span>
+<span class="nc" id="L645">        Alert alert =</span>
+            new Alert(Alert.AlertType.ERROR, &quot;Too many tasks! Remove some before you add more&quot;);
+<span class="nc" id="L647">        alert.showAndWait();</span>
+<span class="nc" id="L648">      } else {</span>
+<span class="nc" id="L649">        Task newTask = new Task(nameEntry.getValue(), descriptionField.getValue(), false);</span>
+<span class="nc" id="L650">        this.addTask(weekday.getCorrespondingIndex(), newTask);</span>
+      }
+<span class="nc" id="L652">    });</span>
+<span class="nc" id="L653">    Button cancelButton = new Button(&quot;Cancel&quot;);</span>
+<span class="nc" id="L654">    HBox finalButtons = new HBox();</span>
+<span class="nc" id="L655">    finalButtons.getChildren().addAll(createTaskButton, cancelButton);</span>
+<span class="nc" id="L656">    finalButtons.setAlignment(Pos.CENTER);</span>
+<span class="nc" id="L657">    finalButtons.setPrefHeight(40);</span>
+    // Creating and showing the dialog
+<span class="nc" id="L659">    VBox dialogVbox = new VBox();</span>
+<span class="nc" id="L660">    dialogVbox.getChildren()</span>
+<span class="nc" id="L661">        .addAll(nameEntry.getHbox(), chooseDay.getHbox(), descriptionField.getHbox(), finalButtons);</span>
+<span class="nc" id="L662">    Dialog&lt;Void&gt; dialog = new Dialog&lt;&gt;();</span>
+<span class="nc" id="L663">    dialog.setTitle(&quot;Create Task&quot;);</span>
+<span class="nc" id="L664">    dialog.getDialogPane().setContent(dialogVbox);</span>
+<span class="nc" id="L665">    dialog.getDialogPane().setPrefWidth(300);</span>
+<span class="nc" id="L666">    Window window = dialog.getDialogPane().getScene().getWindow();</span>
+<span class="nc" id="L667">    window.setOnCloseRequest(event -&gt; window.hide());</span>
+<span class="nc" id="L668">    cancelButton.setOnAction(event -&gt; window.hide());</span>
+<span class="nc" id="L669">    dialog.show();</span>
+<span class="nc" id="L670">  }</span>
+
+  /**
+   * Handler method for adding a task.
+   */
+  private void addTask(int dayIndex, Task task) {
+<span class="nc" id="L676">    this.week.addTask(dayIndex, task);</span>
+<span class="nc" id="L677">    Hyperlink newTask = new Hyperlink(task.getName());</span>
+<span class="nc" id="L678">    Hyperlink newTaskDup = new Hyperlink(task.getName());</span>
+<span class="nc bnc" id="L679" title="All 2 branches missed.">    if (task.getComplete()) {</span>
+<span class="nc" id="L680">      newTask.setTextFill(Color.GREEN);</span>
+<span class="nc" id="L681">      newTaskDup.setTextFill(Color.GREEN);</span>
+    } else {
+<span class="nc" id="L683">      newTask.setTextFill(Color.RED);</span>
+<span class="nc" id="L684">      newTaskDup.setTextFill(Color.RED);</span>
+    }
+
+<span class="nc" id="L687">    newTask.setOnMouseClicked(e -&gt; {</span>
+<span class="nc" id="L688">      this.handleClickedOnTask(task);</span>
+<span class="nc" id="L689">    });</span>
+<span class="nc" id="L690">    newTaskDup.setOnMouseClicked(e -&gt; {</span>
+<span class="nc" id="L691">      this.handleClickedOnTask(task);</span>
+<span class="nc" id="L692">    });</span>
+<span class="nc" id="L693">    this.allTasksList.getItems().add(newTaskDup);</span>
+<span class="nc bnc" id="L694" title="All 8 branches missed.">    switch (dayIndex) {</span>
+      case 0:
+<span class="nc" id="L696">        this.mondayTaskList.getItems().add(newTask);</span>
+<span class="nc" id="L697">        break;</span>
+      case 1:
+<span class="nc" id="L699">        this.tuesdayTaskList.getItems().add(newTask);</span>
+<span class="nc" id="L700">        break;</span>
+      case 2:
+<span class="nc" id="L702">        this.wednesdayTaskList.getItems().add(newTask);</span>
+<span class="nc" id="L703">        break;</span>
+      case 3:
+<span class="nc" id="L705">        this.thursdayTaskList.getItems().add(newTask);</span>
+<span class="nc" id="L706">        break;</span>
+      case 4:
+<span class="nc" id="L708">        this.fridayTaskList.getItems().add(newTask);</span>
+<span class="nc" id="L709">        break;</span>
+      case 5:
+<span class="nc" id="L711">        this.saturdayTaskList.getItems().add(newTask);</span>
+<span class="nc" id="L712">        break;</span>
+      case 6:
+<span class="nc" id="L714">        this.sundayTaskList.getItems().add(newTask);</span>
+        break;
+    }
+<span class="nc" id="L717">    updateWeeklyOverview();</span>
+<span class="nc" id="L718">  }</span>
+
+  /**
+   * Show a dialog upon clicking on a task.
+   *
+   * @param task The clicked task
+   */
+  private void handleClickedOnTask(Task task) {
+    // Create a dialog to show event details
+<span class="nc" id="L727">    Dialog&lt;Event&gt; dialog = new Dialog&lt;&gt;();</span>
+<span class="nc" id="L728">    dialog.setTitle(&quot;Task Details&quot;);</span>
+<span class="nc" id="L729">    dialog.setHeaderText(task.getName());</span>
+
+    // Create labels and text fields for each event detail
+<span class="nc" id="L732">    Label nameLabel = new Label(&quot;Name: &quot; + task.getName());</span>
+<span class="nc" id="L733">    Button editNameButton = new Button(&quot;Edit&quot;);</span>
+<span class="nc" id="L734">    JavaFxDialog editNameDialog = new NameEntry();</span>
+<span class="nc" id="L735">    editNameButton.setOnMouseClicked(e -&gt; {</span>
+<span class="nc" id="L736">      this.editTaskDialog(editNameDialog, task);</span>
+<span class="nc" id="L737">      dialog.close();</span>
+<span class="nc" id="L738">    });</span>
+<span class="nc" id="L739">    Label descriptionLabel = new Label(&quot;Description: &quot; + task.getDescription());</span>
+<span class="nc" id="L740">    Button editDescriptionButton = new Button(&quot;Edit&quot;);</span>
+<span class="nc" id="L741">    JavaFxDialog editDescriptionDialog = new DescriptionField();</span>
+<span class="nc" id="L742">    editDescriptionButton.setOnMouseClicked(e -&gt; {</span>
+<span class="nc" id="L743">      this.editTaskDialog(editDescriptionDialog, task);</span>
+<span class="nc" id="L744">      dialog.close();</span>
+<span class="nc" id="L745">    });</span>
+
+<span class="nc" id="L747">    Label taskStatusLabel = new Label(&quot;Completion Status: &quot; + task.getComplete());</span>
+<span class="nc" id="L748">    Button changeStatus = new Button(&quot;Change Status&quot;);</span>
+<span class="nc" id="L749">    changeStatus.setOnMouseClicked(e -&gt; {</span>
+<span class="nc" id="L750">      task.changeStatus();</span>
+<span class="nc" id="L751">      taskStatusLabel.setText(&quot;Completion Status: &quot; + task.getComplete());</span>
+<span class="nc bnc" id="L752" title="All 2 branches missed.">      if (task.getComplete()) {</span>
+<span class="nc" id="L753">        changeStatus.setText(&quot;Set Incomplete&quot;);</span>
+      } else {
+<span class="nc" id="L755">        changeStatus.setText(&quot;Set Completed&quot;);</span>
+      }
+<span class="nc" id="L757">      dialog.close();</span>
+<span class="nc" id="L758">      updateWeeklyOverview();</span>
+<span class="nc" id="L759">      refreshLists();</span>
+<span class="nc" id="L760">    });</span>
+
+<span class="nc" id="L762">    Button deleteEventButton = new Button(&quot;Delete Task&quot;);</span>
+<span class="nc" id="L763">    deleteEventButton.setOnMouseClicked(e -&gt; {</span>
+<span class="nc" id="L764">      this.removeTask(task);</span>
+<span class="nc" id="L765">      dialog.close();</span>
+<span class="nc" id="L766">    });</span>
+
+    // Create a grid pane to organize the labels and text fields
+<span class="nc" id="L769">    GridPane grid = new GridPane();</span>
+<span class="nc" id="L770">    grid.add(nameLabel, 1, 1);</span>
+<span class="nc" id="L771">    grid.add(editNameButton, 2, 1);</span>
+
+<span class="nc" id="L773">    grid.add(descriptionLabel, 1, 2);</span>
+<span class="nc" id="L774">    grid.add(editDescriptionButton, 2, 2);</span>
+
+<span class="nc" id="L776">    grid.add(taskStatusLabel, 1, 3);</span>
+<span class="nc" id="L777">    grid.add(changeStatus, 2, 3);</span>
+
+<span class="nc" id="L779">    grid.add(deleteEventButton, 1, 4);</span>
+
+<span class="nc" id="L781">    dialog.getDialogPane().setPrefWidth(300);</span>
+<span class="nc" id="L782">    dialog.getDialogPane().setContent(grid);</span>
+
+    // Add buttons to the dialog for editing and removing the event
+<span class="nc" id="L785">    dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK);</span>
+<span class="nc" id="L786">    dialog.show();</span>
+<span class="nc" id="L787">  }</span>
+
+  /**
+   * Edit a task.
+   *
+   * @param javaFxDialog The JavaFx Dialog option
+   * @param task         The task to be edited
+   */
+  private void editTaskDialog(JavaFxDialog javaFxDialog, Task task) {
+<span class="nc" id="L796">    Dialog&lt;Void&gt; dialog = new Dialog&lt;&gt;();</span>
+<span class="nc" id="L797">    dialog.setTitle(&quot;Edit Task&quot;);</span>
+<span class="nc" id="L798">    Button saveButton = new Button(&quot;Save&quot;);</span>
+<span class="nc" id="L799">    saveButton.setOnMouseClicked(e -&gt; {</span>
+<span class="nc bnc" id="L800" title="All 3 branches missed.">      switch (javaFxDialog.type()) {</span>
+        case &quot;NameEntry&quot;:
+<span class="nc" id="L802">          task.editName(javaFxDialog.getValue());</span>
+<span class="nc" id="L803">          this.refreshLists();</span>
+<span class="nc" id="L804">          dialog.close();</span>
+<span class="nc" id="L805">          break;</span>
+        case &quot;DescriptionField&quot;:
+<span class="nc" id="L807">          task.editDescription(javaFxDialog.getValue());</span>
+<span class="nc" id="L808">          dialog.close();</span>
+          break;
+      }
+<span class="nc" id="L811">    });</span>
+<span class="nc" id="L812">    GridPane taskEditGrid = new GridPane();</span>
+<span class="nc" id="L813">    taskEditGrid.add(javaFxDialog.getHbox(), 1, 1);</span>
+<span class="nc" id="L814">    taskEditGrid.add(saveButton, 1, 2);</span>
+<span class="nc" id="L815">    dialog.getDialogPane().setContent(taskEditGrid);</span>
+<span class="nc" id="L816">    dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK);</span>
+<span class="nc" id="L817">    dialog.show();</span>
+<span class="nc" id="L818">  }</span>
+
+  /**
+   * Remove this task.
+   *
+   * @param task The task to be removed
+   */
+  private void removeTask(Task task) {
+<span class="nc bnc" id="L826" title="All 2 branches missed.">    for (int i = 0; i &lt; 6; i++) {</span>
+<span class="nc" id="L827">      Day curDay = this.week.getDay(i);</span>
+<span class="nc" id="L828">      curDay.removeTask(task);</span>
+    }
+<span class="nc" id="L830">    this.refreshLists();</span>
+<span class="nc" id="L831">  }</span>
+
+  /**
+   * Refresh the events and task lists.
+   */
+  private void refreshLists() {
+<span class="nc" id="L837">    mondayEventList.getItems().clear();</span>
+<span class="nc" id="L838">    mondayTaskList.getItems().clear();</span>
+<span class="nc" id="L839">    tuesdayEventList.getItems().clear();</span>
+<span class="nc" id="L840">    tuesdayTaskList.getItems().clear();</span>
+<span class="nc" id="L841">    wednesdayEventList.getItems().clear();</span>
+<span class="nc" id="L842">    wednesdayTaskList.getItems().clear();</span>
+<span class="nc" id="L843">    thursdayEventList.getItems().clear();</span>
+<span class="nc" id="L844">    thursdayTaskList.getItems().clear();</span>
+<span class="nc" id="L845">    fridayEventList.getItems().clear();</span>
+<span class="nc" id="L846">    fridayTaskList.getItems().clear();</span>
+<span class="nc" id="L847">    saturdayEventList.getItems().clear();</span>
+<span class="nc" id="L848">    saturdayTaskList.getItems().clear();</span>
+<span class="nc" id="L849">    sundayEventList.getItems().clear();</span>
+<span class="nc" id="L850">    sundayTaskList.getItems().clear();</span>
+<span class="nc" id="L851">    allTasksList.getItems().clear();</span>
+<span class="nc bnc" id="L852" title="All 2 branches missed.">    for (int i = 0; i &lt; 6; i++) {</span>
+<span class="nc" id="L853">      Day curDay = this.week.getDay(i);</span>
+<span class="nc" id="L854">      List&lt;Event&gt; events = curDay.getEventsCopy();</span>
+<span class="nc" id="L855">      curDay.clearEvents();</span>
+<span class="nc" id="L856">      List&lt;Task&gt; tasks = curDay.getTasksCopy(); // implement later</span>
+<span class="nc" id="L857">      curDay.clearTasks();</span>
+<span class="nc bnc" id="L858" title="All 2 branches missed.">      for (Event event : events) {</span>
+<span class="nc" id="L859">        this.addEvent(i, event);</span>
+<span class="nc" id="L860">      }</span>
+<span class="nc bnc" id="L861" title="All 2 branches missed.">      for (Task task : tasks) {</span>
+<span class="nc" id="L862">        this.addTask(i, task);</span>
+<span class="nc" id="L863">      }</span>
+    }
+<span class="nc" id="L865">  }</span>
+
+  /**
+   * Determine if the day's tasks are at max capacity.
+   *
+   * @param day The day to be examined
+   * @return Is the day's tasks at max capacity
+   */
+  private boolean atCapacityTasks(Day day) {
+<span class="nc bnc" id="L874" title="All 2 branches missed.">    return day.getTasks().size() &gt;= week.getMaxTasks();</span>
+  }
+
+  /**
+   * Determine if the day's events are at max capacity.
+   *
+   * @param day The day to be examined
+   * @return Is the day's events at max capacity
+   */
+  private boolean atCapacityEvents(Day day) {
+<span class="nc bnc" id="L884" title="All 2 branches missed.">    return day.getEvents().size() &gt;= week.getMaxEvents();</span>
+  }
+
+  /**
+   * Handler method for choosing a .bujo file.
+   */
+  private void chooseFile() {
+<span class="nc" id="L891">    FileChooser fileChooser = new FileChooser();</span>
+<span class="nc" id="L892">    fileChooser.setTitle(&quot;Open Bujo File&quot;);</span>
+<span class="nc" id="L893">    File selectedFile = fileChooser.showOpenDialog(this.stage); // The chosen file</span>
+<span class="nc" id="L894">    System.out.println(selectedFile.toString());</span>
+<span class="nc" id="L895">    this.week = BujoFileReader.getFile(selectedFile);</span>
+<span class="nc" id="L896">    this.initGui();</span>
+<span class="nc" id="L897">  }</span>
+
+  /**
+   * Handler method for saving a .bujo file.
+   */
+  private void saveFile() {
+<span class="nc" id="L903">    FileChooser fileChooser = new FileChooser();</span>
+<span class="nc" id="L904">    fileChooser.setTitle(&quot;Save Bujo File&quot;);</span>
+<span class="nc" id="L905">    fileChooser.setInitialFileName(this.week.getName() + &quot;.bujo&quot;);</span>
+<span class="nc" id="L906">    File selectedFile = fileChooser.showSaveDialog(this.stage);</span>
+    try {
+<span class="nc" id="L908">      String path = selectedFile.getPath();</span>
+<span class="nc" id="L909">      BujoFileWriter.saveWeek(this.week, path);</span>
+<span class="nc" id="L910">    } catch (Exception e) {</span>
+<span class="nc" id="L911">      System.out.println(&quot;Cannot save file&quot;);</span>
+<span class="nc" id="L912">    }</span>
+<span class="nc" id="L913">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

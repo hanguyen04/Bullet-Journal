@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Day.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">pa05-template</a> &gt; <a href="index.source.html" class="el_package">cs3500.pa05.Model</a> &gt; <span class="el_source">Day.java</span></div><h1>Day.java</h1><pre class="source lang-java linenums">package cs3500.pa05.Model;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Represents a day in a bullet journal.
+ */
+public class Day {
+<span class="nc" id="L10">  private List&lt;Task&gt; tasks = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L11">  private List&lt;Event&gt; events = new ArrayList&lt;&gt;();</span>
+
+  /**
+   * Create a new day.
+   */
+<span class="nc" id="L16">  public Day() {</span>
+
+<span class="nc" id="L18">  }</span>
+
+
+  /**
+   * Add a task to the list of tasks.
+   *
+   * @param task The task to be added
+   */
+  public void addTask(Task task) {
+<span class="nc" id="L27">    this.tasks.add(task);</span>
+<span class="nc" id="L28">  }</span>
+
+  /**
+   * Add an event to the list of events.
+   *
+   * @param event The event to be added
+   */
+  public void addEvent(Event event) {
+<span class="nc" id="L36">    this.events.add(event);</span>
+<span class="nc" id="L37">  }</span>
+
+
+  /**
+   * Get this day's tasks.
+   *
+   * @return The day's tasks
+   */
+  public List&lt;Task&gt; getTasks() {
+<span class="nc" id="L46">    return this.tasks;</span>
+  }
+
+  /**
+   * Get this day's events.
+   *
+   * @return The day's events
+   */
+  public List&lt;Event&gt; getEvents() {
+<span class="nc" id="L55">    return this.events;</span>
+  }
+
+  /**
+   * Remove an event from this day.
+   *
+   * @param event The event to be removed
+   */
+  public void removeEvent(Event event) {
+<span class="nc bnc" id="L64" title="All 2 branches missed.">    for (int i = 0; i &lt; this.events.size(); i++) {</span>
+<span class="nc bnc" id="L65" title="All 2 branches missed.">      if (event == this.events.get(i)) {</span>
+<span class="nc" id="L66">        this.events.remove(i);</span>
+      }
+    }
+<span class="nc" id="L69">  }</span>
+
+  /**
+   * Remove a task from this day.
+   *
+   * @param task The task to be removed
+   */
+  public void removeTask(Task task) {
+<span class="nc bnc" id="L77" title="All 2 branches missed.">    for (int i = 0; i &lt; this.tasks.size(); i++) {</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">      if (task == this.tasks.get(i)) {</span>
+<span class="nc" id="L79">        this.tasks.remove(i);</span>
+      }
+    }
+<span class="nc" id="L82">  }</span>
+
+  /**
+   * Clear this day's events.
+   */
+  public void clearEvents() {
+<span class="nc" id="L88">    this.events.clear();</span>
+<span class="nc" id="L89">  }</span>
+
+  /**
+   * Clear this day's tasks.
+   */
+  public void clearTasks() {
+<span class="nc" id="L95">    this.tasks.clear();</span>
+<span class="nc" id="L96">  }</span>
+
+  /**
+   * Get a deep copy of the list of events.
+   *
+   * @return A deep copy of the list of events
+   */
+  public List&lt;Event&gt; getEventsCopy() {
+<span class="nc" id="L104">    List&lt;Event&gt; copiedEvents = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L105" title="All 2 branches missed.">    for (Event event : this.events) {</span>
+<span class="nc" id="L106">      Event newEvent = event.getCopy();</span>
+<span class="nc" id="L107">      copiedEvents.add(newEvent);</span>
+<span class="nc" id="L108">    }</span>
+<span class="nc" id="L109">    return copiedEvents;</span>
+  }
+
+  /**
+   * Get a deep copy of the list of tasks.
+   *
+   * @return A deep copy of the list of tasks
+   */
+  public List&lt;Task&gt; getTasksCopy() {
+<span class="nc" id="L118">    List&lt;Task&gt; copiedTasks = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L119" title="All 2 branches missed.">    for (Task task : this.tasks) {</span>
+<span class="nc" id="L120">      Task newTask = task.getCopy();</span>
+<span class="nc" id="L121">      copiedTasks.add(newTask);</span>
+<span class="nc" id="L122">    }</span>
+<span class="nc" id="L123">    return copiedTasks;</span>
+  }
+
+  /**
+   * Create new day in File Reader
+   *
+   * @param tasks List of tasks
+   * @param events List of events
+   * @return new Day object
+   */
+  public static Day day(List&lt;Task&gt; tasks, List&lt;Event&gt; events) {
+<span class="nc" id="L134">    Day day = new Day();</span>
+<span class="nc bnc" id="L135" title="All 2 branches missed.">    for (Task task : tasks) {</span>
+<span class="nc" id="L136">      day.addTask(task);</span>
+<span class="nc" id="L137">    }</span>
+<span class="nc bnc" id="L138" title="All 2 branches missed.">    for (Event event : events) {</span>
+<span class="nc" id="L139">      day.addEvent(event);</span>
+<span class="nc" id="L140">    }</span>
+<span class="nc" id="L141">    return day;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Event.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">pa05-template</a> &gt; <a href="index.source.html" class="el_package">cs3500.pa05.Model</a> &gt; <span class="el_source">Event.java</span></div><h1>Event.java</h1><pre class="source lang-java linenums">package cs3500.pa05.Model;
+
+/**
+ * Represents an event in a bullet journal.
+ */
+public class Event {
+  private String name;
+  private String startTime;
+  private String duration;
+  private String description;
+
+  /**
+   * Create a new event.
+   *
+   * @param name        The event name
+   * @param startTime   The event start time
+   * @param duration    The event duration
+   * @param description THe event description
+   */
+<span class="nc" id="L20">  public Event(String name, String startTime, String duration, String description) {</span>
+<span class="nc" id="L21">    this.name = name;</span>
+<span class="nc" id="L22">    this.startTime = startTime;</span>
+<span class="nc" id="L23">    this.duration = duration;</span>
+<span class="nc" id="L24">    this.description = description;</span>
+<span class="nc" id="L25">  }</span>
+
+  /**
+   * Get the name of the Event
+   *
+   * @return The name of the Event
+   */
+  public String getName() {
+<span class="nc" id="L33">    return this.name;</span>
+  }
+
+  /**
+   * The start time of the Event
+   *
+   * @return The start time of the Event
+   */
+  public String getStartTime() {
+<span class="nc" id="L42">    return this.startTime;</span>
+  }
+
+  /**
+   * The duration of the Event
+   *
+   * @return The duration of the Event
+   */
+  public String getDuration() {
+<span class="nc" id="L51">    return this.duration;</span>
+  }
+
+  /**
+   * Get this event's description.
+   *
+   * @return The description
+   */
+  public String getDescription() {
+<span class="nc" id="L60">    return this.description;</span>
+  }
+
+  /**
+   * Edit this event's description.
+   *
+   * @param description The new description
+   */
+  public void editDescription(String description) {
+<span class="nc" id="L69">    this.description = description;</span>
+<span class="nc" id="L70">  }</span>
+
+  /**
+   * Edit this event's start time.
+   *
+   * @param startTime The new start time
+   */
+  public void editStartTime(String startTime) {
+<span class="nc" id="L78">    this.startTime = startTime;</span>
+<span class="nc" id="L79">  }</span>
+
+  /**
+   * Edit this event's duration.
+   *
+   * @param duration The new duration
+   */
+  public void editDuration(String duration) {
+<span class="nc" id="L87">    this.duration = duration;</span>
+<span class="nc" id="L88">  }</span>
+
+  /**
+   * Edit this event's name.
+   *
+   * @param name The new name
+   */
+  public void editName(String name) {
+<span class="nc" id="L96">    this.name = name;</span>
+<span class="nc" id="L97">  }</span>
+
+  /**
+   * Get a deep copy of this event.
+   *
+   * @return A deep copy of this event
+   */
+  public Event getCopy() {
+<span class="nc" id="L105">    return new Event(this.name, this.startTime, this.duration, this.description);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

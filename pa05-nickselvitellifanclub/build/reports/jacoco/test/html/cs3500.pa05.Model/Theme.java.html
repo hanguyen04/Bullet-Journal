@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Theme.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">pa05-template</a> &gt; <a href="index.source.html" class="el_package">cs3500.pa05.Model</a> &gt; <span class="el_source">Theme.java</span></div><h1>Theme.java</h1><pre class="source lang-java linenums">package cs3500.pa05.Model;
+
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+
+/**
+ * Represents a theme in a bujo session.
+ */
+public class Theme {
+
+  private String name;
+  private Font font;
+  private Color primary;
+  private Color secondary;
+  private Color fontColor;
+
+  /**
+   * Create a new theme.
+   *
+   * @param name      The theme name
+   * @param font      The theme font
+   * @param primary   The primary color
+   * @param secondary The secondary color
+   * @param fontColor The color of the font
+   */
+<span class="fc" id="L26">  public Theme(String name, Font font, Color primary, Color secondary, Color fontColor) {</span>
+<span class="fc" id="L27">    this.name = name;</span>
+<span class="fc" id="L28">    this.font = font;</span>
+<span class="fc" id="L29">    this.primary = primary;</span>
+<span class="fc" id="L30">    this.secondary = secondary;</span>
+<span class="fc" id="L31">    this.fontColor = fontColor;</span>
+<span class="fc" id="L32">  }</span>
+
+  /**
+   *
+   */
+<span class="fc" id="L37">  public Theme() {</span>
+
+<span class="fc" id="L39">  }</span>
+
+
+  /**
+   * A pre-made light theme.
+   *
+   * @return A light theme;
+   */
+  public Theme lightTheme() {
+<span class="fc" id="L48">    Font font = new Font(&quot;Calibri&quot;, 17);</span>
+<span class="fc" id="L49">    Color primary = Color.rgb(230, 230, 230);</span>
+<span class="fc" id="L50">    Color secondary = Color.rgb(227, 217, 200);</span>
+<span class="fc" id="L51">    Color fontColor = Color.rgb(23, 22, 22);</span>
+<span class="fc" id="L52">    return new Theme(&quot;Light Theme&quot;, font, primary, secondary, fontColor);</span>
+  }
+
+  /**
+   * A pre-made dark theme.
+   *
+   * @return A dark theme;
+   */
+  public Theme darkTheme() {
+<span class="nc" id="L61">    Font font = new Font(&quot;Tahoma&quot;, 16);</span>
+<span class="nc" id="L62">    Color primary = Color.rgb(22, 23, 33);</span>
+<span class="nc" id="L63">    Color secondary = Color.rgb(65, 55, 82);</span>
+<span class="nc" id="L64">    Color fontColor = Color.rgb(228, 228, 235);</span>
+<span class="nc" id="L65">    return new Theme(&quot;Dark Theme&quot;, font, primary, secondary, fontColor);</span>
+  }
+
+  /**
+   * A pre-made sunset theme.
+   *
+   * @return A sunset theme;
+   */
+  public Theme sunsetTheme() {
+<span class="nc" id="L74">    Font font = new Font(&quot;Garamond&quot;, 17);</span>
+<span class="nc" id="L75">    Color primary = Color.rgb(250, 208, 135);</span>
+<span class="nc" id="L76">    Color secondary = Color.rgb(191, 77, 111);</span>
+<span class="nc" id="L77">    Color fontColor = Color.rgb(40, 25, 59);</span>
+<span class="nc" id="L78">    return new Theme(&quot;Sunset Theme&quot;, font, primary, secondary, fontColor);</span>
+  }
+
+  /**
+   * Get the name of this theme.
+   *
+   * @return The name of the theme
+   */
+  public String getName() {
+<span class="fc" id="L87">    return this.name;</span>
+  }
+
+  /**
+   * Get the theme's font.
+   *
+   * @return The theme's font.
+   */
+  public Font getFont() {
+<span class="fc" id="L96">    return font;</span>
+  }
+
+  /**
+   * Get the theme's primary color.
+   *
+   * @return The theme's primary color.
+   */
+  public Color getPrimaryColor() {
+<span class="fc" id="L105">    return primary;</span>
+  }
+
+  /**
+   * Get the theme's secondary color.
+   *
+   * @return The theme's secondary color.
+   */
+  public Color getSecondaryColor() {
+<span class="fc" id="L114">    return secondary;</span>
+  }
+
+  /**
+   * Get the theme's font color.
+   *
+   * @return The theme's font color.
+   */
+  public Color getFontColor() {
+<span class="fc" id="L123">    return fontColor;</span>
+  }
+
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

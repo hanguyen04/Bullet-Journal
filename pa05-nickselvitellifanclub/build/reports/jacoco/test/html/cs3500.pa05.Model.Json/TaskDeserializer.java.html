@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TaskDeserializer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">pa05-template</a> &gt; <a href="index.source.html" class="el_package">cs3500.pa05.Model.Json</a> &gt; <span class="el_source">TaskDeserializer.java</span></div><h1>TaskDeserializer.java</h1><pre class="source lang-java linenums">package cs3500.pa05.Model.Json;
+
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.TreeNode;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import cs3500.pa05.Model.Task;
+import java.io.IOException;
+import javafx.scene.Node;
+
+/**
+ * Deserialize Task Object
+ */
+<span class="nc" id="L16">public class TaskDeserializer extends JsonDeserializer&lt;Task&gt; {</span>
+  @Override
+  public Task deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+<span class="nc" id="L19">    TreeNode node = p.readValueAsTree();</span>
+<span class="nc" id="L20">    Node name = (Node)node.get(&quot;name&quot;);</span>
+<span class="nc" id="L21">    Node description = (Node)node.get(&quot;description&quot;);</span>
+<span class="nc" id="L22">    Node complete = (Node)node.get(&quot;complete&quot;);</span>
+
+<span class="nc" id="L24">    ObjectMapper objectMapper = new ObjectMapper();</span>
+<span class="nc" id="L25">    Boolean completed = objectMapper.readValue(complete.toString(), new TypeReference&lt;&gt;() {});</span>
+
+<span class="nc" id="L27">    return new Task(name.toString(), description.toString(), completed);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BujoFileWriter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">pa05-template</a> &gt; <a href="index.source.html" class="el_package">cs3500.pa05.Model</a> &gt; <span class="el_source">BujoFileWriter.java</span></div><h1>BujoFileWriter.java</h1><pre class="source lang-java linenums">package cs3500.pa05.Model;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import cs3500.pa05.Model.Json.DayJson;
+import cs3500.pa05.Model.Json.EventJson;
+import cs3500.pa05.Model.Json.FontJson;
+import cs3500.pa05.Model.Json.JsonUtils;
+import cs3500.pa05.Model.Json.TaskJson;
+import cs3500.pa05.Model.Json.ThemeJson;
+import cs3500.pa05.Model.Json.WeekJson;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * File Writer for Bujo file to write a week
+ */
+<span class="nc" id="L21">public class BujoFileWriter {</span>
+
+
+  /**
+   * Write into new file with given path and JsonNode
+   *
+   * @param week Week to be saved
+   * @param filePath File Path
+   */
+  public static void saveWeek(Week week, String filePath) {
+
+    // create dayJson records
+<span class="nc" id="L33">    List&lt;DayJson&gt; dayJsons = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L34" title="All 2 branches missed.">    for (Day day : week.days) {</span>
+<span class="nc" id="L35">      List&lt;TaskJson&gt; taskJsons = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L36">      List&lt;EventJson&gt; eventJsons = new ArrayList&lt;&gt;();</span>
+
+<span class="nc bnc" id="L38" title="All 2 branches missed.">      for (Task task : day.getTasks()) {</span>
+<span class="nc" id="L39">        TaskJson taskJson = new TaskJson(task.getName(), task.getDescription(), task.getComplete());</span>
+<span class="nc" id="L40">        taskJsons.add(taskJson);</span>
+<span class="nc" id="L41">      }</span>
+<span class="nc bnc" id="L42" title="All 2 branches missed.">      for (Event event : day.getEvents()) {</span>
+<span class="nc" id="L43">        EventJson eventJson = new EventJson(event.getName(), event.getStartTime(),</span>
+<span class="nc" id="L44">            event.getDuration(), event.getDescription());</span>
+<span class="nc" id="L45">        eventJsons.add(eventJson);</span>
+<span class="nc" id="L46">      }</span>
+<span class="nc" id="L47">      DayJson dayJson = new DayJson(taskJsons, eventJsons);</span>
+<span class="nc" id="L48">      dayJsons.add(dayJson);</span>
+<span class="nc" id="L49">    }</span>
+
+    // Make ThemeJson records
+<span class="nc" id="L52">    Theme mainTheme = week.getTheme();</span>
+<span class="nc" id="L53">    FontJson fontJson = new FontJson(mainTheme.getFont().getName(), mainTheme.getFont().getSize());</span>
+<span class="nc" id="L54">    ThemeJson themeJson = new ThemeJson(mainTheme.getName(), fontJson,</span>
+<span class="nc" id="L55">        mainTheme.getPrimaryColor(), mainTheme.getSecondaryColor(), mainTheme.getFontColor());</span>
+
+<span class="nc" id="L57">    List&lt;ThemeJson&gt; themeJsons = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">    for (Theme theme : week.getThemeList()) {</span>
+<span class="nc" id="L59">      fontJson = new FontJson(theme.getFont().getName(), theme.getFont().getSize());</span>
+<span class="nc" id="L60">      ThemeJson currTheme = new ThemeJson(theme.getName(),fontJson,</span>
+<span class="nc" id="L61">          theme.getPrimaryColor(), theme.getSecondaryColor(), theme.getFontColor());</span>
+<span class="nc" id="L62">      themeJsons.add(currTheme);</span>
+<span class="nc" id="L63">    }</span>
+
+<span class="nc" id="L65">    WeekJson weekJson = new WeekJson(</span>
+<span class="nc" id="L66">        week.getName(),</span>
+        dayJsons,
+        themeJson,
+<span class="nc" id="L69">        week.getMaxEvents(),</span>
+<span class="nc" id="L70">        week.getMaxTasks(),</span>
+        themeJsons
+    );
+
+
+<span class="nc" id="L75">    JsonNode jsonFile = JsonUtils.serializeRecord(weekJson);</span>
+
+<span class="nc" id="L77">    ObjectMapper objectMapper = new ObjectMapper();</span>
+<span class="nc" id="L78">    try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {</span>
+<span class="nc" id="L79">      String json = objectMapper.writeValueAsString(jsonFile);</span>
+<span class="nc" id="L80">      writer.write(json);</span>
+<span class="nc" id="L81">      writer.newLine();</span>
+<span class="nc" id="L82">      System.out.println(&quot;File Written&quot;);</span>
+<span class="nc" id="L83">    } catch (IOException e) {</span>
+<span class="nc" id="L84">      System.out.println(&quot;An error occurred while writing file: &quot; + e.getMessage());</span>
+<span class="nc" id="L85">    }</span>
+<span class="nc" id="L86">  }</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
